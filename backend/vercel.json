@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "builds": [
+    { "src": "/docs/public/**", "use": "@vercel/static" },
+    { "src": "/server.js", "use": "@vercel/node" }
+  ],
+  "routes": [
+    { "src": "/docs/swagger-ui.css", "dest": "/docs/public/swagger-ui.css" },
+    { "src": "/(.*)", "dest": "/server.js" }
+  ]
+}
+   

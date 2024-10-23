@@ -1,0 +1,8 @@
+**/node_modules/**
+**/.vscode/**
+mongo
+templates
+*.bak*
+tests/
+testServer.js
+dump

@@ -1,0 +1,3875 @@
+openapi: "3.0.2"
+info:
+  title: Rest API Docs
+  version: "1.0"
+servers:
+  - url: http://localhost:4444/
+  - url: https://ciaro360-server.vercel.app/
+components:
+  schemas:
+    ResponseWithMsg:
+      type: object
+      properties:
+        status:
+          type: boolean
+        msg:
+          type: string
+
+    ResponseWithMsgError:
+      type: object
+      properties:
+        status:
+          type: boolean
+          example: false
+        msg:
+          type: string
+
+    Control:
+      type: object
+      properties:
+        property:
+          type: integer
+
+    Incomming_Tags:
+      type: array
+      items:
+        type: object
+        properties:
+          _id:
+            type: string
+            example: "6487f67cc0f0ec0734feaf64"
+          name:
+            type: string
+            example: "DEMO2"
+
+    Onboarding:
+      type: object
+      properties:
+        master:
+          type: object
+          properties:
+            logoUri:
+              type: string
+            exportTemplatesId:
+              type: string
+            OrgDetails:
+              type: object
+              properties:
+                name:
+                  type: string
+                emailServer:
+                  type: object
+                  properties:
+                    host:
+                      type: string
+                    port:
+                      type: number
+                    auth:
+                      type: object
+                      properties:
+                        username:
+                          type: string
+                        password:
+                          type: string
+                        emailAddress:
+                          type: string
+            authSetup:
+              type: object
+              properties:
+                sso:
+                  type: object
+                  properties:
+                    enabled:
+                      type: boolean
+                    samlFile:
+                      type: string
+                normalLogin:
+                  type: object
+                  properties:
+                    enabled:
+                      type: boolean
+                    complexity:
+                      type: object
+                      properties:
+                        passwordMinLength:
+                          type: number
+                        passwordMaxLength:
+                          type: number
+                        includeUppercase:
+                          type: boolean
+                        includeLowercase:
+                          type: boolean
+                        includeNumber:
+                          type: boolean
+            workflow:
+              type: object
+              properties:
+                tier3Enabled:
+                  type: boolean
+            risk:
+              type: object
+              properties:
+                formulaId:
+                  type: string
+            log:
+              type: object
+              properties:
+                retentionPeriod:
+                  type: number
+                policy:
+                  type: boolean
+                procedures:
+                  type: boolean
+                controls:
+                  type: boolean
+            reviewFrequency:
+              type: string
+              enum:
+                - daily
+                - weekly
+                - monthly
+                - yearly
+        sso:
+          type: object
+          properties:
+            idP_Name:
+              type: string
+            issuer:
+              type: string
+            ssoUrl:
+              type: string
+            cert:
+              type: string
+
+    LogsData:
+      type: object
+      properties:
+        _id:
+          type: string
+        objectType:
+          type: string
+          enum:
+            - policy
+            - procedures
+            - controls
+            - users
+            - tags
+        objectId:
+          type: string
+        userId:
+          type: string
+        action:
+          type: string
+          enum:
+            - add
+            - delete
+            - update
+            - review
+            - approve
+        description:
+          type: string
+        timestamp:
+          type: integer
+        __v:
+          type: integer
+
+    RoleInterface:
+      type: object
+      properties:
+        name:
+          type: string
+        userControl:
+          type: object
+          properties:
+            fullAccess:
+              type: boolean
+            view:
+              type: boolean
+        onboarding:
+          type: object
+          properties:
+            fullAccess:
+              type: boolean
+            view:
+              type: boolean
+        control:
+          type: object
+          properties:
+            fullAccess:
+              type: boolean
+            view:
+              type: boolean
+        policy:
+          type: object
+          properties:
+            fullAccess:
+              type: boolean
+            view:
+              type: boolean
+            edit:
+              type: boolean
+        procedure:
+          type: object
+          properties:
+            fullAccess:
+              type: boolean
+            view:
+              type: boolean
+            edit:
+              type: boolean
+        TPRA:
+          type: object
+          properties:
+            fullAccess:
+              type: boolean
+            view:
+              type: boolean
+            edit:
+              type: boolean
+        training:
+          type: object
+          properties:
+            fullAccess:
+              type: boolean
+            view:
+              type: boolean
+            edit:
+              type: boolean
+        evidences:
+          type: object
+          properties:
+            fullAccess:
+              type: boolean
+            view:
+              type: boolean
+            edit:
+              type: boolean
+        audit:
+          type: object
+          properties:
+            fullAccess:
+              type: boolean
+            view:
+              type: boolean
+            edit:
+              type: boolean
+        superAdmin:
+          type: boolean
+        admin:
+          type: boolean
+
+    TPR_OutgoingInterface:
+      type: object
+      properties:
+        title:
+          type: string
+        author:
+          type: array
+          items:
+            type: string
+        TPRUsers:
+          type: array
+          items:
+            type: string
+        qna:
+          type: array
+          items:
+            type: object
+            properties:
+              questionId:
+                type: array
+                items:
+                  type: string
+              question:
+                type: string
+              ans:
+                type: string
+              type:
+                type: string
+                enum:
+                  - Boolean
+                  - String
+        approved:
+          type: boolean
+
+    TPR_IncomingInterface:
+      type: object
+      properties:
+        _id:
+          type: string
+        title:
+          type: string
+        author:
+          type: array
+          items:
+            type: string
+        TPRUsers:
+          type: array
+          items:
+            type: string
+        qna:
+          type: array
+          items:
+            type: object
+            properties:
+              questionId:
+                type: array
+                items:
+                  type: string
+              question:
+                type: string
+              type:
+                type: string
+                enum:
+                  - String
+              _id:
+                type: string
+              ans:
+                type: string
+        approved:
+          type: boolean
+        __v:
+          type: integer
+
+    ListOfTRP_Forms:
+      type: array
+      items:
+        type: object
+        properties:
+          _id:
+            type: string
+          author:
+            type: array
+            items:
+              type: string
+          TPRUsers:
+            type: array
+            items:
+              type: string
+          approved:
+            type: boolean
+
+    Outgoing_Tags:
+      type: object
+      properties:
+        listed:
+          type: array
+          example: ["64410f9eb6f82aada0625a94", "64410f9eb6f82aada0625a94"]
+        unlisted:
+          type: array
+          example: ["Hr", "It"]
+
+    PolicyCreate:
+      type: object
+      properties:
+        projectId:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        content:
+          type: string
+        
+    getAllScopes:
+      type: object
+      properties:
+        _id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        projects:
+          type: array
+          items:
+            type: object
+            properties:
+              _id:
+                type: string
+              name:
+                type: string
+        __v:
+          type: number
+        
+    getEvidence:
+      type: object
+      properties:
+        status:
+          type: boolean
+          description: Indicates the success status.
+        evidence:
+          type: object
+          properties:
+            _id:
+              type: string
+              description: The ID of the evidence.
+            name:
+              type: string
+              description: The name of the evidence.
+            url:
+              type: string
+              description: The URL of the evidence.
+            frequency:
+              type: string
+              description: The frequency of the evidence.
+            assignee:
+              type: array
+              items:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    description: The ID of the assignee.
+                  email:
+                    type: string
+                    description: The email of the assignee.
+            custom:
+              type: boolean
+              description: Indicates if the evidence is custom.
+            files:
+              type: array
+              items:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    description: The ID of the file.
+                  name:
+                    type: string
+                    description: The name of the file.
+            controls:
+              type: array
+              items:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    description: The ID of the control.
+                  nameId:
+                    type: string
+                    description: The name ID of the control.
+                  name:
+                    type: string
+                    description: The name of the control.
+            risks:
+              type: array
+              items:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    description: The ID of the risk.
+                  title:
+                    type: string
+                    description: The title of the risk.
+            createdAt:
+              type: integer
+              description: The timestamp when the evidence was created.
+            updatedAt:
+              type: integer
+              description: The timestamp when the evidence was last updated.
+            __v:
+              type: integer
+              description: Version control field.
+            updatedBy:
+              type: string
+              description: The ID of the user who last updated the evidence.
+      required:
+        - status
+        - evidence
+
+    Policy:
+      type: object
+      properties:
+        status:
+          type: boolean
+        policy:
+          type: object
+          properties:
+            assignees:
+              type: object
+              properties:
+                author:
+                  type: array
+                  items:
+                    type: string
+                reviewer:
+                  type: array
+                  items:
+                    type: string
+                approver:
+                  type: array
+                  items:
+                    type: string
+            _id:
+              type: string
+            title:
+              type: string
+            description:
+              type: string
+            content:
+              type: string
+            created_by:
+              type: string
+            updated_by:
+              type: string
+            status:
+              type: string
+            versions:
+              type: array
+              items:
+                type: string
+            reminder:
+              type: string
+              format: date-time
+            tags:
+              type: array
+              items:
+                type: string
+            procedure:
+              type: array
+              items:
+                type: string
+            comments:
+              type: array
+              items:
+                type: string
+            logs:
+              type: array
+              items:
+                type: string
+            beingModified:
+              type: boolean
+            created_at:
+              type: string
+              format: date-time
+            updated_at:
+              type: string
+              format: date-time
+            __v:
+              type: integer
+
+    IncommingPolicyVersion:
+      type: object
+      properties:
+        _id:
+          type: string
+        name:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        content:
+          type: string
+        created_by:
+          type: string
+        reminder:
+          type: string
+          format: date-time
+        tags:
+          type: array
+          items:
+            type: string
+        procedure:
+          type: array
+          items:
+            type: string
+        created_at:
+          type: string
+          format: date-time
+        __v:
+          type: integer
+
+    RiskInput:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        status:
+          type: string
+        content:
+          type: string
+        created_by:
+          type: string
+        updated_by:
+          type: string
+        category:
+          type: string
+        likelihood:
+          type: integer
+        impact:
+          type: integer
+        tags:
+          type: array
+          items:
+            type: string
+        comments:
+          type: array
+          items:
+            type: string
+
+    RisksApiResponse:
+      type: object
+      properties:
+        status:
+          type: boolean
+        risk:
+          type: array
+          items:
+            type: object
+            properties:
+              _id:
+                type: string
+              title:
+                type: string
+              description:
+                type: string
+              status:
+                type: string
+              created_by:
+                type: string
+              category:
+                type: string
+
+    Risk:
+      type: object
+      properties:
+        _id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        status:
+          type: string
+        content:
+          type: string
+        created_by:
+          type: string
+        updated_by:
+          type: string
+        category:
+          type: string
+        likelihood:
+          type: integer
+        impact:
+          type: integer
+        tags:
+          type: array
+          items:
+            type: string
+        comments:
+          type: array
+          items:
+            type: string
+        logs:
+          type: array
+          items:
+            type: object
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        risk:
+          type: integer
+        __v:
+          type: integer
+
+    CommentInput:
+      type: object
+      properties:
+        images:
+          type: array
+          items:
+            type: string
+        content:
+          type: string
+
+    CommentResponse:
+      type: object
+      properties:
+        status:
+          type: boolean
+        comment:
+          type: array
+          items:
+            nullable: true
+            type: object
+            properties:
+              _id:
+                type: string
+              content:
+                type: string
+              images:
+                type: array
+                items:
+                  type: string
+              created_by:
+                type: string
+              created_at:
+                type: string
+              __v:
+                type: number
+
+    
+    getAllEvidences:
+      type: object
+      properties:
+        status:
+          type: boolean
+        evidences:
+          type: array
+          items:
+            nullable: true
+            type: object
+            properties:
+              _id:
+                type: string
+              name:
+                type: string
+
+
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+paths:
+  # PUBLIC ROUTES
+
+  /auth/login:
+    post:
+      tags:
+        - "Public Routes"
+      summary: Login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: "abcd@gmail.com"
+                password:
+                  type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    default: true
+                  accessToken:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                      id:
+                        type: string
+                      passExpiry:
+                        type: boolean
+                      role:
+                        type: array
+                        items:
+                          type: string
+        "404":
+          description: Not Found
+        "406":
+          description: Not Acceptable
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    default: false
+                  passExpiry:
+                    type: boolean
+                    default: true
+        "500":
+          description: Internal Server Error
+
+  /auth/reset-password:
+    post:
+      tags:
+        - "Public Routes"
+      summary: Reset your password
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: abc@gmail.com
+                oldPassword:
+                  type: string
+                newPassword:
+                  type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                  accessToken:
+                    type: string
+        400:
+          description: Old and new password are same
+        404:
+          description: Not Found
+
+  /auth/sso:
+    get:
+      tags:
+        - "Public Routes"
+      summary: Login using SSO
+
+      responses:
+        "200":
+          description: Success
+        404:
+          description: Not Found
+
+  /auth/forgotPassword:
+    post:
+      summary: Request password reset
+      tags:
+        - Public Routes
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: User email
+              required:
+                - email
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsg"
+
+        '404':
+          description: Not found
+        401:
+          description: Unauthorized
+      security:
+        - bearerAuth: []
+
+  /public/resetPassword:
+    post:
+      summary: Reset password
+      tags:
+        - Public Routes
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+                  description: Reset token
+                password:
+                  type: string
+                  description: New password
+              required:
+                - token
+                - password
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsg"
+        '404':
+          description: Not found
+        401:
+          description: Unauthorized
+      security:
+        - bearerAuth: []
+
+
+  # User Management Routes
+  /user:
+    get:
+      tags:
+        - "User Management Routes"
+      description: "Get list of users"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                page:
+                  type: integer
+                count:
+                  type: integer
+                role:
+                  type: string
+                  example: "644927ffb38a0d9b28968428"
+
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                  count:
+                    type: number
+                  users:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        email:
+                          type: string
+                          format: email
+                        firstname:
+                          type: string
+                        lastname:
+                          type: string
+                        active:
+                          type: boolean
+                        role:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            name:
+                              type: string
+                        jobTitle:
+                          type: string
+        404:
+          description: Not Found
+        401:
+          description: Unauthorized
+      security:
+        - bearerAuth: []
+
+  # /user/count:
+  #   get:
+  #     tags:
+  #       - "User Management Routes"
+  #     description: "Retrieve total count of users"
+  #     responses:
+  #       "200":
+  #         description: Retrieved successfully
+  #         content:
+  #           application/json:
+  #             schema:
+  #               type: object
+  #               properties:
+  #                 status:
+  #                   type: boolean
+  #                   example: true
+  #                 count:
+  #                   type: number
+  #                   example: 10
+                        
+  #       "404":
+  #         description: Users counting failed or users not found
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: "#/components/schemas/ResponseWithMsgError"
+  #       "401":
+  #         description: Unauthorized
+  #     security:
+  #       - bearerAuth: []
+
+
+  /user/invite:
+    post:
+      tags:
+        - "User Management Routes"
+      summary: create links for joning of new users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: "abc@gmail.com"
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsg"
+        "404":
+          description: Not Found
+        401:
+          description: Unauthorized
+      security:
+        - bearerAuth: []
+
+  /user/saveUserByLink:
+    post:
+      tags:
+        - "User Management Routes"
+      description: "Join user to the organisation by the given link"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                tok:
+                  type: string
+                  description: JWT tokken generated at the time of /createUserLink
+                firstname:
+                  type: string
+                lastname:
+                  type: string
+                password:
+                  type: string
+
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsg"
+        404:
+          description: Not Found
+        401:
+          description: Unauthorized
+      security:
+        - bearerAuth: []
+
+  /user/{userId}:
+    put:
+      tags:
+        - "User Management Routes"
+      description: "Update user records"
+      parameters:
+        - name: userId
+          in: path
+          description: User's id which has to be updated
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                active:
+                  type: boolean
+                lastname:
+                  type: string
+                firstname:
+                  type: string
+                jobTitle:
+                  type: string
+                phone:
+                  type: string
+                mobilePhone:
+                  type: string
+                country:
+                  type: string
+                locale:
+                  type: string
+
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsg"
+        404:
+          description: Not Found
+        401:
+          description: Unauthorized
+      security:
+        - bearerAuth: []
+
+    delete:
+      tags:
+        - "User Management Routes"
+      description: "Delete user records"
+      parameters:
+        - name: userId
+          in: path
+          description: User's id which has to be deleted
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsg"
+        404:
+          description: Not Found
+        401:
+          description: Unauthorized
+      security:
+        - bearerAuth: []
+
+  /user/link/{userId}/{roleId}:
+    put:
+      tags:
+        - "User Management Routes"
+      description: "Link role to the given userId"
+      parameters:
+        - name: userId
+          in: path
+          description: User's id which has to be link with roles
+          required: true
+          schema:
+            type: string
+        - name: roleId
+          in: path
+          description: role's id which has to be link with userId
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsg"
+        404:
+          description: Not Found
+        401:
+          description: Unauthorized
+      security:
+        - bearerAuth: []
+
+  /user/logout:
+    post:
+      tags:
+        - "User Management Routes"
+      description: "logout the current user"
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsg"
+        404:
+          description: Not Found
+        401:
+          description: Unauthorized
+      security:
+        - bearerAuth: []
+
+  # File-Upload Routes
+  /file:
+    post:
+      tags:
+        - "File-Upload Routes"
+      description: "Upload Files to Server-DB"
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        "200":
+          description: File uploaded successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+                    example: 5c7f16de348efb2b8c035bde # Example file ID
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsgError"
+
+        401:
+          description: Unauthorized
+      security:
+        - bearerAuth: []
+
+  /file/{id}:
+    get:
+      tags:
+        - "File-Upload Routes"
+      description: "Retrieve File from Server-DB"
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: ID of the file to retrieve
+          schema:
+            type: string
+      responses:
+        200:
+          description: File retrieved successfully
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        404:
+          description: File not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsgError"
+
+        401:
+          description: Unauthorized
+      security:
+        - bearerAuth: []
+
+  # Templates route
+  /templates:
+    get:
+      tags:
+        - "Template Routes"
+      description: "Get all templates"
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+          description: Page number
+        - in: query
+          name: count
+          schema:
+            type: integer
+          description: Number of templates per page
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  templates:
+                    type: array
+                    example: []
+        "404":
+          description: Templates not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsgError"
+
+        401:
+          description: Unauthorized
+      security:
+        - bearerAuth: []
+
+  # Control Routes
+  /control/create:
+    post:
+      tags:
+        - "Control Routes"
+      description: "Create a control"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+      responses:
+        "200":
+          description: Control created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsg"
+        "404":
+          description: Control not created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsgError"
+
+        401:
+          description: Unauthorized
+      security:
+        - bearerAuth: []
+
+  /control/{id}:
+    put:
+      tags:
+        - "Control Routes"
+      description: "Update a control"
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: ID of the control to update
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+      responses:
+        "200":
+          description: Control updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsg"
+        "404":
+          description: Control not found or not updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsgError"
+        401:
+          description: Unauthorized
+      security:
+        - bearerAuth: []
+
+    delete:
+      tags:
+        - "Control Routes"
+      description: "Delete a control"
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: ID of the control to delete
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Control deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsg"
+
+        "404":
+          description: Control not found or not deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsgError"
+
+        401:
+          description: Unauthorized
+
+      security:
+        - bearerAuth: []
+
+  # Tags Routes
+  /tag:
+    get:
+      tags:
+        - "Tags Routes"
+      description: "Get all tags"
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+          description: Page number
+        - in: query
+          name: count
+          schema:
+            type: integer
+          description: Number of tags per page
+        - in: query
+          name: tagName
+          schema:
+            type: string
+          description: Filter tags by name
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  tags:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Incomming_Tags"
+        "404":
+          description: Tags not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsgError"
+
+        401:
+          description: Unauthorized
+      security:
+        - bearerAuth: []
+
+  /tag/{id}:
+    get:
+      tags:
+        - "Tags Routes"
+      description: "Get policies associated with a tag"
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: ID of the tag
+          schema:
+            type: string
+        - in: query
+          name: page
+          schema:
+            type: integer
+          description: Page number
+        - in: query
+          name: count
+          schema:
+            type: integer
+          description: Number of policies per page
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  policies:
+                    type: array
+                    items:
+                      type: string
+                      example: "646085c40a5021e6d0805eae"
+        "404":
+          description: Tag not found or policies not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsgError"
+        401:
+          description: Unauthorized
+
+      security:
+        - bearerAuth: []
+
+    delete:
+      tags:
+        - "Tags Routes"
+      description: "Delete a tag"
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: ID of the tag
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Tag deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsg"
+
+        "404":
+          description: Tag not found or not deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsgError"
+        401:
+          description: Unauthorized
+
+      security:
+        - bearerAuth: []
+
+  /tag/{id}/{name}:
+    put:
+      tags:
+        - "Tags Routes"
+      description: "Update the name of a tag"
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: ID of the tag
+          schema:
+            type: string
+        - in: path
+          name: name
+          required: true
+          description: New name for the tag
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Tag name updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsg"
+        "404":
+          description: Tag not found or name not updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsgError"
+
+        401:
+          description: Unauthorized
+      security:
+        - bearerAuth: []
+
+  /tag/{id}/policies:
+    delete:
+      tags:
+        - "Tags Routes"
+      description: "Remove a tag from multiple policies"
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: ID of the tag
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                policies:
+                  type: array
+                  items:
+                    type: string
+                  description: List of policy IDs
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsg"
+
+        "404":
+          description: Tag not found or policies not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsgError"
+        401:
+          description: Unauthorized
+      security:
+        - bearerAuth: []
+
+  # Onboarding Routes
+  /onboarding:
+    post:
+      tags:
+        - "Onboarding Routes"
+      description: "Create onboarding"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Onboarding"
+      responses:
+        "200":
+          description: Onboarding created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsg"
+
+        "404":
+          description: Onboarding creation failed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsgError"
+
+        "401":
+          description: Unauthorized
+      security:
+        - bearerAuth: []
+
+    put:
+      tags:
+        - "Onboarding Routes"
+      description: "Update onboarding"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Onboarding"
+      responses:
+        "200":
+          description: Onboarding updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsg"
+
+        "404":
+          description: Onboarding update failed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsgError"
+
+        "401":
+          description: Unauthorized
+      security:
+        - bearerAuth: []
+
+  # Logs Routes
+  /logs:
+    get:
+      tags:
+        - "Log Routes"
+      description: "Retrieve logs"
+      parameters:
+        - in: query
+          name: page
+          required: true
+          description: Page number
+          schema:
+            type: integer
+        - in: query
+          name: count
+          required: true
+          description: Number of logs per page
+          schema:
+            type: integer
+        - in: query
+          name: sortByDate
+          required: true
+          description: Sort logs by date
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Logs retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: "#/components/schemas/LogsData"
+        "404":
+          description: Logs retrieval failed or invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsgError"
+        "401":
+          description: Unauthorized
+      security:
+        - bearerAuth: []
+
+  /logs/policy/{id}:
+    get:
+      tags:
+        - "Log Routes"
+      description: "Retrieve logs for a specific policy"
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: ID of the policy
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Logs retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: "#/components/schemas/LogsData"
+        "404":
+          description: Logs retrieval failed or policy not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsgError"
+        "401":
+          description: Unauthorized
+      security:
+        - bearerAuth: []
+
+  # Roles Management Route
+  /roles:
+    post:
+      tags:
+        - "Roles Management Route"
+      description: "Create a role"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RoleInterface"
+      responses:
+        "200":
+          description: Role created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsg"
+        "404":
+          description: Role creation failed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsgError"
+        "401":
+          description: Unauthorized
+      security:
+        - bearerAuth: []
+
+    get:
+      summary: Retrieve roles
+      tags:
+        - Roles Management Route
+      parameters:
+        - in: query
+          name: page
+          required: true
+          schema:
+            type: integer
+        - in: query
+          name: count
+          required: true
+          schema:
+            type: integer
+        - in: query
+          name: name
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    type: boolean
+                    default: true
+                  roles:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                        _id:
+                          type: string
+              
+        '401':
+          description: Unauthorized
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsgError"
+      security:
+        - bearerAuth: []
+
+  /roles/count:
+    get:
+      tags:
+        - "Roles Management Route"
+      description: "Retrieve total count of roles"
+      responses:
+        "200":
+          description: Retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  count:
+                    type: number
+                    example: 10
+                        
+        "404":
+          description: roles counting failed or roles not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsgError"
+        "401":
+          description: Unauthorized
+      security:
+        - bearerAuth: []
+
+
+  /roles/{id}:
+    put:
+      summary: Update a role
+      tags:
+        - Roles Management Route
+      parameters:
+        - in: path
+          name: roleId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoleInterface'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsg"
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not Found
+      security:
+        - bearerAuth: []
+    delete:
+      tags:
+        - "Roles Management Route"
+      description: "Delete a role by ID"
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: ID of the role to delete
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Role deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsg"
+        "404":
+          description: Role deletion failed or role not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsgError"
+        "401":
+          description: Unauthorized
+      security:
+        - bearerAuth: []
+
+  # 3rd Party Risk Assessment Route
+  /tpr:
+    post:
+      tags:
+        - "3rd Party Risk Assessment Route"
+      description: "Create a TPR"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TPR_OutgoingInterface"
+      responses:
+        "200":
+          description: TPR created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsg"
+        "404":
+          description: TPR creation failed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsgError"
+        "401":
+          description: Unauthorized
+      security:
+        - bearerAuth: []
+
+    get:
+      tags:
+        - "3rd Party Risk Assessment Route"
+      description: "Retrieve TPRs by page and count"
+      parameters:
+        - in: path
+          name: page
+          required: true
+          description: Page number
+          schema:
+            type: integer
+        - in: path
+          name: count
+          required: true
+          description: Number of TPRs per page
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: TPRs retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: "#/components/schemas/ListOfTRP_Forms"
+        "404":
+          description: TPR retrieval failed or TPRs not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsgError"
+        "401":
+          description: Unauthorized
+      security:
+        - bearerAuth: []
+
+  /tpr/{id}:
+    delete:
+      tags:
+        - "3rd Party Risk Assessment Route"
+      description: "Delete a TPR by ID"
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: ID of the TPR to delete
+          schema:
+            type: string
+      responses:
+        "200":
+          description: TPR deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsg"
+
+        "404":
+          description: TPR deletion failed or TPR not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsgError"
+
+        "401":
+          description: Unauthorized
+      security:
+        - bearerAuth: []
+
+    get:
+      tags:
+        - "3rd Party Risk Assessment Route"
+      description: "Retrieve a TPR by ID"
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: ID of the TPR to retrieve
+          schema:
+            type: string
+      responses:
+        "200":
+          description: TPR retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: "#/components/schemas/TPR_IncomingInterface"
+
+        "404":
+          description: TPR retrieval failed or TPR not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsgError"
+        "401":
+          description: Unauthorized
+      security:
+        - bearerAuth: []
+
+  /tpr/{id}/ans:
+    put:
+      tags:
+        - "3rd Party Risk Assessment Route"
+      description: "Update TPR answers by ID"
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: ID of the TPR to update answers
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  answer:
+                    type: string
+
+      responses:
+        "200":
+          description: TPR answers updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsg"
+        "404":
+          description: TPR answer update failed or TPR not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsgError"
+        "401":
+          description: Unauthorized
+      security:
+        - bearerAuth: []
+
+  /tpr/{id}/approve:
+    put:
+      tags:
+        - "3rd Party Risk Assessment Route"
+      description: "Set TPR approval status by ID"
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: ID of the TPR to update approval status
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                approve:
+                  type: boolean
+      responses:
+        "200":
+          description: TPR approval status updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsg"
+        "404":
+          description: TPR approval status update failed or TPR not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsgError"
+        "401":
+          description: Unauthorized
+      security:
+        - bearerAuth: []
+
+  # Policy Related Routes
+  /policy/create:
+    post:
+      tags:
+        - "Policy Routes"
+      description: "Create a policy"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PolicyCreate"
+      responses:
+        "200":
+          description: Policy created successfully
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    type: boolean
+                    default: true
+                  data:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                        example: "64410f9eb6f82aada0625a94"
+                      nameId:
+                        type: string
+                        example: 101
+                  
+        "404":
+          description: Policy creation failed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsgError"
+        "401":
+          description: Unauthorized
+      security:
+        - bearerAuth: []
+
+  /policy/{id}/comment:
+    post:
+      tags:
+        - "Policy Routes"
+      description: "Add a comment to a policy"
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: ID of the policy to add a comment to
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                images:
+                  type: array
+                  example:
+                    ["64410f9eb6f82aada0625a94", "64410f9eb6f82aada0625a94"]
+                comment:
+                  type: array
+                  example:
+                    ["64410f9eb6f82aada0625a94", "64410f9eb6f82aada0625a94"]
+
+      responses:
+        "200":
+          description: Comment added successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsg"
+        "404":
+          description: Adding comment to policy failed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsgError"
+        "401":
+          description: Unauthorized
+      security:
+        - bearerAuth: []
+
+  /policy/{id}/version/{name}:
+    post:
+      tags:
+        - "Policy Routes"
+      description: "Create a new version of a policy"
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: ID of the policy to create a new version of
+          schema:
+            type: string
+        - in: path
+          name: name
+          required: true
+          description: Name of the new version
+          schema:
+            type: string
+      responses:
+        "200":
+          description: New version created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  version:
+                    type: string
+                    example: 64895b8e32b66c4ad938a94a
+        "404":
+          description: Creating new version of policy failed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsgError"
+        "401":
+          description: Unauthorized
+      security:
+        - bearerAuth: []
+
+  /policy/{id}/reminder:
+    post:
+      tags:
+        - "Policy Routes"
+      description: "Set a reminder for a policy"
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: ID of the policy to set a reminder for
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                next_reminder:
+                  type: integer
+                  example: 1686720766
+      responses:
+        "200":
+          description: Reminder set successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsg"
+
+        "404":
+          description: Setting reminder for policy failed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsgError"
+        "401":
+          description: Unauthorized
+      security:
+        - bearerAuth: []
+
+  /policy/{id}/tags:
+    post:
+      tags:
+        - "Policy Routes"
+      description: "Add tags to a policy"
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: ID of the policy to add tags to
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                tags:
+                  $ref: "#/components/schemas/Outgoing_Tags"
+      responses:
+        "200":
+          description: Tags added successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsg"
+
+        "404":
+          description: Adding tags to policy failed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsgError"
+
+        "401":
+          description: Unauthorized
+      security:
+        - bearerAuth: []
+
+  /policy:
+    get:
+      tags:
+        - "Policy Routes"
+      description: "Retrieve all policies"
+      parameters:
+        - in: query
+          name: page
+          required: true
+          description: Page number for pagination
+          schema:
+            type: integer
+        - in: query
+          name: count
+          required: true
+          description: Number of policies per page
+          schema:
+            type: integer
+        - in: query
+          name: field
+          description: Field to sort the policies by
+          schema:
+            type: string
+            default: updated_at
+        - in: query
+          name: order
+          description: Sort order (asc or desc)
+          schema:
+            type: string
+            default: asc
+        - in: query
+          name: search
+          description: search query (search in title and it's id)
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Policies retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  count:
+                    type: number
+                    example: 10
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        ID:
+                          type: number
+                        
+                        title:
+                          type: string
+                        
+                        description:
+                          type: string
+                        
+                        created_by:
+                          type: string
+                        
+                        updated_at:
+                          type: string
+                          format: date
+                          
+                        status:
+                          type: string
+
+                        beingModified:
+                          type: string
+                        
+        "404":
+          description: Policy retrieval failed or policies not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsgError"
+        "401":
+          description: Unauthorized
+      security:
+        - bearerAuth: []
+
+  /policy/overview:
+    get:
+      tags:
+        - "Policy Routes"
+      description: "Get policies overview"
+      responses:
+        "200":
+          description: Overview retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      inactive:
+                        type: integer
+                      active:
+                        type: integer
+                      drafted:
+                        type: integer
+                      rejected:
+                        type: integer
+                      deleted:
+                        type: integer
+                        
+        "404":
+          description: Policy retrieval failed or policies not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsgError"
+        "401":
+          description: Unauthorized
+      security:
+        - bearerAuth: []
+
+  # /policy/count:
+  #   get:
+  #     tags:
+  #       - "Policy Routes"
+  #     description: "Retrieve total count of policies"
+  #     responses:
+  #       "200":
+  #         description: Retrieved successfully
+  #         content:
+  #           application/json:
+  #             schema:
+  #               type: object
+  #               properties:
+  #                 status:
+  #                   type: boolean
+  #                   example: true
+  #                 count:
+  #                   type: number
+  #                   example: 10
+                        
+  #       "404":
+  #         description: Policy counting failed or policies not found
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: "#/components/schemas/ResponseWithMsgError"
+  #       "401":
+  #         description: Unauthorized
+  #     security:
+  #       - bearerAuth: []
+
+  /policy/{id}/comments:
+    get:
+      tags:
+        - "Policy Routes"
+      description: "Retrieve comments for a policy"
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: ID of the policy to retrieve comments for
+          schema:
+            type: string
+        - in: query
+          name: page
+          required: true
+          description: Page number for pagination
+          schema:
+            type: integer
+        - in: query
+          name: count
+          required: true
+          description: Number of comments per page
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Comments retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  comment:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        content:
+                          type: string
+                        images:
+                          type: array
+                          items:
+                            type: string
+                        created_by:
+                          type: string
+                        created_at:
+                          type: string
+                          format: date-time
+                        __v:
+                          type: integer
+
+        "404":
+          description: Comment retrieval failed or comments not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsgError"
+        "401":
+          description: Unauthorized
+      security:
+        - bearerAuth: []
+
+  /policy/{id}:
+    get:
+      tags:
+        - "Policy Routes"
+      description: "Retrieve a policy by ID"
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: ID of the policy to retrieve
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Policy retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  policy:
+                    $ref: "#/components/schemas/Policy"
+        "404":
+          description: Policy retrieval failed or policy not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsgError"
+        "401":
+          description: Unauthorized
+      security:
+        - bearerAuth: []
+
+  /policy/{id}/version/{versionId}:
+    get:
+      tags:
+        - "Policy Routes"
+      description: "Retrieve a specific version of a policy"
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: ID of the policy to retrieve the version from
+          schema:
+            type: string
+        - in: path
+          name: versionId
+          required: true
+          description: ID of the version to retrieve
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Version retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  version:
+                    $ref: "#/components/schemas/IncommingPolicyVersion"
+        "404":
+          description: Version retrieval failed or version not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsgError"
+        "401":
+          description: Unauthorized
+      security:
+        - bearerAuth: []
+
+  /policy/export/{id}:
+    get:
+      tags:
+        - "Policy Routes"
+      description: "Export a policy as a PDF"
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: ID of the policy to export
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Policy exported successfully
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+        "404":
+          description: Policy export failed or policy not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsgError"
+        "401":
+          description: Unauthorized
+      security:
+        - bearerAuth: []
+
+  # Risk Routes
+  /risks:
+    post:
+      summary: Create a risk
+      tags:
+        - Risk Routes
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RiskInput'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseWithMsg'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseWithMsgError'
+      security:
+        - bearerAuth: []
+    get:
+      summary: Retrieve All risks
+      tags:
+        - Risk Routes
+      parameters:
+        - in: query
+          name: page
+          required: true
+          schema:
+            type: integer
+        - in: query
+          name: count
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RisksApiResponse'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseWithMsgError'
+      security:
+        - bearerAuth: []
+  
+  /risks/{riskId}/comments:
+    get:
+      summary: Retrieve comments for a risk
+      tags:
+        - Risk Routes
+      parameters:
+        - in: path
+          name: riskId
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: page
+          required: true
+          schema:
+            type: integer
+        - in: query
+          name: count
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommentResponse'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not Found
+      security:
+        - bearerAuth: []
+
+    post:
+      summary: Create a comment for a risk
+      tags:
+        - Risk Routes
+      parameters:
+        - in: path
+          name: riskId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommentInput'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseWithMsg'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseWithMsgError'
+      security:
+        - bearerAuth: []
+
+
+  /risks/{riskId}/tags:
+    get:
+      summary: Retrieve tags for a risk
+      tags:
+        - Risk Routes
+      parameters:
+        - in: path
+          name: riskId
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: page
+          required: true
+          schema:
+            type: integer
+        - in: query
+          name: count
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    default: true
+                  tags:
+                    type: array
+                    example: ["64981e9189aa814d71194e45","64981e9189aa814d71194e44"]
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not Found
+      security:
+        - bearerAuth: []
+  
+    post:
+      summary: Add tags to a risk
+      tags:
+        - Risk Routes
+      parameters:
+        - in: path
+          name: riskId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Outgoing_Tags'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseWithMsg'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseWithMsgError'
+      security:
+        - bearerAuth: []
+    delete:
+      summary: Remove tags from a risk
+      tags:
+        - Risk Routes
+      parameters:
+        - in: path
+          name: riskId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                tags: 
+                  type: array
+                  example: ["6496de9a100585e48f77c6dd","6496de9a100585e48f77c6de"]
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseWithMsg'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseWithMsgError'
+      security:
+        - bearerAuth: []
+
+
+
+  /risks/{riskId}:
+    get:
+      summary: Retrieve a risk by ID
+      tags:
+        - Risk Routes
+      parameters:
+        - in: path
+          name: riskId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                  risk:
+                    $ref: "#/components/schemas/Risk"
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not Found
+      security:
+        - bearerAuth: []
+    put:
+      summary: Update a risk
+      tags:
+        - Risk Routes
+      parameters:
+        - in: path
+          name: riskId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseWithMsg'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseWithMsgError'
+      security:
+        - bearerAuth: []
+    delete:
+      summary: Delete a risk
+      tags:
+        - Risk Routes
+      parameters:
+        - in: path
+          name: riskId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseWithMsg'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseWithMsgError'
+      security:
+        - bearerAuth: []
+  
+  
+  /risks/{riskId}/comments/{commentId}:
+    delete:
+      summary: Delete a comment for a risk
+      tags:
+        - Risk Routes
+      parameters:
+        - in: path
+          name: riskId
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: commentId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseWithMsg'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseWithMsgError'
+      security:
+        - bearerAuth: []
+  
+  # Scopes
+  /scopes:
+    post:
+      summary: Create a new scope
+      tags:
+        - Scopes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: The name of the scope.
+                description:
+                  type: string
+                  description: The description of the scope.
+              required:
+                - name
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsg"
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseWithMsgError'
+        '401':
+          description: Unauthorized
+      security:
+        - bearerAuth: []
+        
+    get:
+      summary: Retrieve scopes
+      tags:
+        - Scopes
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            description: The page number.
+        - in: query
+          name: count
+          schema:
+            type: integer
+            description: The number of items per page.
+        - in: query
+          name: scopeName
+          schema:
+            type: string
+            description: Filter scopes by name.
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getAllScopes'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseWithMsgError'
+        '401':
+          description: Unauthorized
+      security:
+        - bearerAuth: []
+    
+  /scopes/{id}:
+    put:
+      summary: Update a scope
+      tags:
+        - Scopes
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the scope to update.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: The new name of the scope.
+                description:
+                  type: string
+                  description: The new description of the scope.
+              required:
+                - name
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseWithMsg'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseWithMsgError'
+        '401':
+          description: Unauthorized
+      security:
+        - bearerAuth: []
+    delete:
+      summary: Delete a scope
+      tags:
+        - Scopes
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the scope to delete.
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseWithMsg'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseWithMsgError'
+        '401':
+          description: Unauthorized
+      security:
+        - bearerAuth: []
+
+  /scopes/{id}/projects:
+    post:
+      summary: Link a scope to projects
+      tags:
+        - Scopes
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the scope to link to projects.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                projects:
+                  type: array
+                  items:
+                    type: string
+                  description: An array of project IDs to link to the scope.
+              required:
+                - projects
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseWithMsg'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseWithMsgError'
+        '401':
+          description: Unauthorized
+      security:
+        - bearerAuth: []
+    delete:
+      summary: Unlink a scope from projects
+      tags:
+        - Scopes
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the scope to unlink from projects.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                projects:
+                  type: array
+                  items:
+                    type: string
+                  description: An array of project IDs to unlink from the scope.
+              required:
+                - projects
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseWithMsg'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseWithMsgError' 
+        '401':
+          description: Unauthorized
+      security:
+        - bearerAuth: []
+
+  # EVIDENCE
+  /evidences:
+    post:
+      summary: Create a new evidence
+      tags:
+        - Evidences
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: The name of the evidence.
+                frequency:
+                  type: string
+                  description: The frequency of the evidence.
+                files:
+                  type: array
+                  items:
+                    type: string
+                    description: Files related to the evidence.
+                url:
+                  type: array
+                  items:
+                    type: string
+                    description: URL of the evidence.
+                assignee:
+                  type: array
+                  items:
+                    type: string
+                    description: Id of assignees
+                controls:
+                  type: array
+                  items:
+                    type: string
+                    description: Id of controls
+                risks:
+                  type: array
+                  items:
+                    type: string
+                    description: Id of riskss
+              required:
+                - name
+                - frequency
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsg"
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseWithMsgError'
+        '401':
+          description: Unauthorized
+      security:
+        - bearerAuth: []
+
+    get:
+      summary: Retrieve evidences
+      tags:
+        - Evidences
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            description: The page number.
+        - in: query
+          name: count
+          schema:
+            type: integer
+            description: The number of items per page.
+        - in: query
+          name: evidenceName
+          schema:
+            type: string
+            description: Filter evidences by name.
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getAllEvidences'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseWithMsgError'
+        '401':
+          description: Unauthorized
+      security:
+        - bearerAuth: []
+
+  /evidences/{id}:
+    get:
+      summary: Retrieve a specific evidence by ID
+      tags:
+        - Evidences
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            description: The ID of the evidence to retrieve.
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getEvidence'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseWithMsgError'
+        '401':
+          description: Unauthorized
+      security:
+        - bearerAuth: []
+
+    put:
+      summary: Update a specific evidence by ID
+      tags:
+        - Evidences
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            description: The ID of the evidence to update.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: The updated name of the evidence.
+                frequency:
+                  type: string
+                  description: The updated frequency of the evidence.
+                url:
+                  type: string
+                  description: The updated URL of the evidence.
+              required:
+                - name
+                - frequency
+                - url
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsg"
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseWithMsgError'
+        '401':
+          description: Unauthorized
+      security:
+        - bearerAuth: []
+
+    delete:
+      summary: Delete a specific evidence by ID
+      tags:
+        - Evidences
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            description: The ID of the evidence to delete.
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsg"
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseWithMsgError'
+        '401':
+          description: Unauthorized
+      security:
+        - bearerAuth: []
+
+  /evidences/{id}/risks:
+    put:
+      summary: Link an evidence to one or more risks
+      tags:
+        - Evidences
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            description: The ID of the evidence to link to risks.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                risks:
+                  type: array
+                  items:
+                    type: string
+                    description: The IDs of the risks to link to the evidence.
+              required:
+                - risks
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsg"
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseWithMsgError'
+        '401':
+          description: Unauthorized
+      security:
+        - bearerAuth: []
+
+    delete:
+      summary: Remove the evidence from one or more risks
+      tags:
+        - Evidences
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            description: The ID of the evidence to remove from risks.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                risks:
+                  type: array
+                  items:
+                    type: string
+                    description: The IDs of the risks from which to remove the evidence.
+              required:
+                - risks
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsg"
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseWithMsgError'
+        '401':
+          description: Unauthorized
+      security:
+        - bearerAuth: []
+
+
+  /evidences/{id}/controls:
+    put:
+      summary: Link an evidence to one or more controls
+      tags:
+        - Evidences
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            description: The ID of the evidence to link to controls.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                controls:
+                  type: array
+                  items:
+                    type: string
+                    description: The IDs of the controls to link to the evidence.
+              required:
+                - controls
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsg"
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseWithMsgError'
+        '401':
+          description: Unauthorized
+      security:
+        - bearerAuth: []
+
+    delete:
+      summary: Remove the evidence from one or more controls
+      tags:
+        - Evidences
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            description: The ID of the evidence to remove from controls.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                controls:
+                  type: array
+                  items:
+                    type: string
+                    description: The IDs of the controls from which to remove the evidence.
+              required:
+                - controls
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsg"
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseWithMsgError'
+        '401':
+          description: Unauthorized
+      security:
+        - bearerAuth: []
+
+  /evidences/{id}/assignee:
+    put:
+      summary: Assign an evidence to an assignee
+      tags:
+        - Evidences
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            description: The ID of the evidence to assign.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                assignee:
+                  type: string
+                  description: The ID of the assignee.
+              required:
+                - assignee
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsg"
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseWithMsgError'
+        '401':
+          description: Unauthorized
+      security:
+        - bearerAuth: []
+
+    delete:
+      summary: Remove the evidence's assignee
+      tags:
+        - Evidences
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            description: The ID of the evidence to remove the assignee from.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                assignee:
+                  type: string
+                  description: The ID of the assignee to remove.
+              required:
+                - assignee
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsg"
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseWithMsgError'
+        '401':
+          description: Unauthorized
+      security:
+        - bearerAuth: []
+
+
+  /evidences/{id}/files:
+    put:
+      summary: Add files to an evidence
+      tags:
+        - Evidences
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            description: The ID of the evidence to add files to.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                files:
+                  type: array
+                  items:
+                    type: string
+                    description: URL of files to add to the evidence.
+              required:
+                - files
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsg"
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseWithMsgError'
+        '401':
+          description: Unauthorized
+      security:
+        - bearerAuth: []
+
+    delete:
+      summary: Remove files from the evidence
+      tags:
+        - Evidences
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            description: The ID of the evidence from which to remove files.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                files:
+                  type: array
+                  items:
+                    type: string
+                    description: URLs of the files to remove from the evidence.
+              required:
+                - files
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseWithMsg"
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseWithMsgError'
+        '401':
+          description: Unauthorized
+      security:
+        - bearerAuth: []
+
+
+
+
+
+
+  
