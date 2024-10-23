@@ -1,4 +1,4 @@
-export const baseURL = "http://192.168.0.236:4444";
+export const baseURL = process.env.REACT_APP_BASE_URL;
 
 export const RegExp =
   /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*(),.?":{}|<>]).*$/;
